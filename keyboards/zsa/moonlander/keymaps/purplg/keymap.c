@@ -1,9 +1,11 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
+#include "raw_hid.h"
 
 #include "aliases.h"
 #include "colors.h"
 #include "layers.c"
+#include "rawhid.c"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_moonlander(
@@ -26,7 +28,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                     RGB_VAD       , RGB_VAI       , TOG_LAYER_CLR , KC_TRANSPARENT, RGB_HUD       , RGB_HUI
   ),
 
-  [2] = LAYOUT_moonlander(
+  [MEDIA] = LAYOUT_moonlander(
     AU_TOG        , KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, RESET         ,          
     MU_TOG        , KC_TRANSPARENT, KC_TRANSPARENT, KC_MS_UP      , KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_PLAY_PAUSE , KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
     MU_MOD        , KC_TRANSPARENT, KC_MS_LEFT    , KC_MS_DOWN    , KC_MS_RIGHT   , KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_PREV_TRACK , KC_NEXT_TRACK , KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_PLAY_PAUSE ,
@@ -36,3 +38,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_WWW_BACK
  ),
 };
+
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  debug_enable=true;
+  //debug_matrix=true;
+  //debug_keyboard=true;
+  //debug_mouse=true;
+}
