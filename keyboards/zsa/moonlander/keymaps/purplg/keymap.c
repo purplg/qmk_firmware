@@ -21,7 +21,7 @@ enum media_state {
 
 enum layers {
     BASE = 0,
-    ALT,
+    SYMBOL,
     MEDIA,
 };
 
@@ -45,7 +45,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                     KC_LGUI       , KC_SPACE      , KC_BSPACE     , KC_LALT       , KC_ESCAPE     , KC_ENTER
   ),
 
-  [ALT] = LAYOUT_moonlander(
+  [SYMBOl] = LAYOUT_moonlander(
     KC_ESCAPE     , KC_F1         , KC_F2         , KC_F3         , KC_F4         , KC_F5         , KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_F6         , KC_F7         , KC_F8         , KC_F9         , KC_F10        , KC_F11        ,
     KC_TRANSPARENT, KC_EXLM       , KC_AT         , KC_LCBR       , KC_RCBR       , KC_PIPE       , KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_UP         , KC_7          , KC_8          , KC_9          , KC_ASTR       , KC_F12        ,
     KC_TRANSPARENT, KC_HASH       , KC_DLR        , KC_LPRN       , KC_RPRN       , KC_GRAVE      , KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_DOWN       , KC_4          , KC_5          , KC_6          , KC_KP_PLUS    , KC_TRANSPARENT, 
@@ -226,7 +226,7 @@ void rgb_matrix_indicators_user(void) {
             rgb_set_mod(MOD_KEYCOLOR);
             rgb_set_layer(LAYER_KEYCOLOR);
             break;
-        case ALT:
+        case SYMBOL:
             rgb_set_alpha(MOD_KEYCOLOR);
             break;
         case MEDIA:
