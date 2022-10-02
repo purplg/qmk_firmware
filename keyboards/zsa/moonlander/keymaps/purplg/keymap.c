@@ -6,11 +6,27 @@
 
 #define LENGTH(arr) sizeof(arr) / sizeof(uint16_t)
 
+#define WS_NUM_DISPLAYS 2
+#define WS_NUM_WS 4
+
+typedef bool ws_state[WS_NUM_DISPLAYS*WS_NUM_WS];
+
+uint8_t workspaces[WS_NUM_DISPLAYS*WS_NUM_WS] = {
+  06, 11, 16, 21,
+  07, 12, 17, 22,
+};
+
+bool workspace_state[WS_NUM_DISPLAYS*WS_NUM_WS] = {
+  false, false, false, false,
+  false, false, false, false,
+};
+
 uint8_t media_rgb[] = {MOD_KEYCOLOR};
 
 enum event {
     event_NONE  = 0,
     event_MEDIA = 1,
+    event_WORKSPACE = 2,
 };
 
 enum media_state {
@@ -46,18 +62,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [SYMB] = LAYOUT_moonlander(
     KC_ESC , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , _______,                   _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11 ,
-    _______, KC_EXLM, KC_AT  , KC_LCBR, KC_RCBR, KC_PIPE, _______,                   _______, KC_UP  , KC_7   , KC_8   , KC_9   , KC_ASTR, KC_F12 ,
+    _______, KC_EXLM, KC_AT  , KC_LCBR, KC_RCBR, KC_PIPE, _______,                   _______, KC_UP  , KC_7   , KC_8   , KC_9   , KC_EQL , KC_F12 ,
     _______, KC_HASH, KC_DLR , KC_LPRN, KC_RPRN, KC_GRV , _______,                   _______, KC_DOWN, KC_4   , KC_5   , KC_6   , KC_PPLS, _______, 
     _______, _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD,                                     KC_AMPR, KC_1   , KC_2   , KC_3   , KC_BSLS, _______,
-    _______, KC_COMM, _______, _______, _______,              RGB_MOD,           RGB_TOG,              _______, KC_DOT , KC_0   , KC_EQL , _______, 
+    _______, KC_COMM, _______, _______, _______,              RGB_MOD,           RGB_TOG,              _______, KC_DOT , KC_0   , KC_ASTR, _______, 
 //         ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
                                                  RGB_VAD, RGB_VAI, _______, _______, RGB_HUD, RGB_HUI
   ),
 
   [MDIA] = LAYOUT_moonlander(
     AU_TOG , _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, RESET  ,
-    MU_TOG , KC_BTN1, KC_MS_U, KC_BTN2, _______, _______, _______,                   _______, KC_MPLY, _______, _______, _______, _______, _______, 
-    MU_MOD , KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______,                   _______, KC_MPRV, KC_MNXT, _______, _______, _______, KC_MPLY,
+    MU_TOG , KC_BTN1, KC_MS_U, KC_BTN2, _______, _______, _______,                   KC_MPRV, KC_MPLY, KC_MNXT, KC_WH_U, _______, _______, _______, 
+    MU_MOD , KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______,                   _______, _______, KC_WH_L, KC_WH_D, KC_WH_R, _______, KC_MPLY,
     _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______, 
     _______, _______, _______, _______, _______,             _______,            _______,              KC_VOLU, KC_VOLD, KC_MUTE, _______, _______, 
 //         ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
@@ -85,8 +101,8 @@ const uint16_t PROGMEM right_keys[] = {
 
 const uint16_t PROGMEM media_keys[] = {
 
-                                          62,
-                                          63, 58,
+                                      66, 62, 57,
+
 
 
 
@@ -166,19 +182,26 @@ const void rgb_set_wasd(uint8_t red, uint8_t green, uint8_t blue) {
   rgb_set_keys(wasd_keys, LENGTH(wasd_keys), red, green, blue);
 }
 
+const void rgb_set_ws(uint8_t red, uint8_t green, uint8_t blue) {
+  uint8_t key;
+  bool state;
+  for (uint8_t ws = 0; ws < WS_NUM_WS*WS_NUM_DISPLAYS; ws++) {
+      key = workspaces[ws];
+      state = workspace_state[ws];
+      if (state) {
+	rgb_matrix_set_color(key, red, green, blue);
+      } else {
+	rgb_matrix_set_color(key, ALPHA_KEYCOLOR);
+      }
+  }
+}
+
 const void rgb_set_mod(uint8_t red, uint8_t green, uint8_t blue) {
   rgb_set_keys(mod_keys, LENGTH(mod_keys), red, green, blue);
 }
 
 const void rgb_set_layer(uint8_t red, uint8_t green, uint8_t blue) {
   rgb_set_keys(layer_keys, LENGTH(layer_keys), red, green, blue);
-}
-
-void keyboard_post_init_user(void) {
-  debug_enable=true;
-  //debug_matrix=true;
-  //debug_keyboard=true;
-  //debug_mouse=true;
 }
 
 void set_media_state(uint8_t state) {
@@ -196,19 +219,33 @@ void set_media_state(uint8_t state) {
     }
 }
 
+void keyboard_post_init_user(void) {
+  debug_enable=true;
+  //debug_matrix=true;
+  //debug_keyboard=true;
+  //debug_mouse=true;
+}
+
 void raw_hid_receive(uint8_t *data, uint8_t length) {
-    uprintf("received hid data: ");
+    uprintf("raw hid: ");
     for (int i = 0; i < length; i++) {
-        uprintf("%u", data[i]);
+        uprintf("%u,", data[i]);
     }
     uprintf("\n");
     switch (data[0]) {
         case event_NONE:
-            break;
+          break;
 
         case event_MEDIA:
-            set_media_state(data[1]);
-            break;
+          set_media_state(data[1]);
+          break;
+
+        case event_WORKSPACE:
+	  uint8_t i = 1 << (WS_NUM_WS * WS_NUM_DISPLAYS - 1);
+	  for (uint8_t ws = 0; i >> ws > 0; ws++) {
+	    workspace_state[ws] = data[1] & i >> ws;
+	  }
+          break;
 
         default:
             uprintf("Unknown event: %u\n", data[0]);
@@ -216,12 +253,12 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
 }
 
 void rgb_matrix_indicators_user(void) {
+    rgb_matrix_set_color_all(0, 0, 0);
     switch (get_highest_layer(layer_state)) {
         case BASE:
-            rgb_matrix_set_color_all(0, 0, 0);
-            rgb_set_num(NUM_KEYCOLOR);
             rgb_set_alpha(ALPHA_KEYCOLOR);
-            rgb_set_wasd(WASD_KEYCOLOR);
+            //rgb_set_wasd(WASD_KEYCOLOR);
+            rgb_set_ws(WASD_KEYCOLOR);
             rgb_set_mod(MOD_KEYCOLOR);
             rgb_set_layer(LAYER_KEYCOLOR);
             break;
@@ -229,9 +266,9 @@ void rgb_matrix_indicators_user(void) {
             rgb_set_alpha(MOD_KEYCOLOR);
             break;
         case MDIA:
-            rgb_matrix_set_color_all(0, 0, 0);
             rgb_set_media(MOD_KEYCOLOR);
             rgb_matrix_set_color(62, media_rgb[0], media_rgb[1], media_rgb[2]);
             break;
     }
 }
+
