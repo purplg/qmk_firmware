@@ -2,7 +2,6 @@
 #include "version.h"
 #include "print.h"
 
-#include "aliases.h"
 #include "colors.h"
 
 #define LENGTH(arr) sizeof(arr) / sizeof(uint16_t)
@@ -21,8 +20,8 @@ enum media_state {
 
 enum layers {
     BASE = 0,
-    SYMBOL,
-    MEDIA,
+    SYMB,
+    MDIA,
 };
 
 /*
@@ -36,33 +35,33 @@ enum layers {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_moonlander(
-    KC_GRAVE      , KC_1          , KC_2          , KC_3          , KC_4          , KC_5          , KC_6          ,                                 KC_5          , KC_6          , KC_7          , KC_8          , KC_9          , KC_0          , KC_MINUS      ,       
-    KC_TAB        , KC_Q          , KC_W          , KC_E          , KC_R          , KC_T          , KC_Y          ,                                 KC_T          , KC_Y          , KC_U          , KC_I          , KC_O          , KC_P          , KC_BSLASH     ,      
-    KC_LALT       , KC_A          , KC_S          , KC_D          , KC_F          , KC_G          , KC_H          ,                                 KC_G          , KC_H          , KC_J          , KC_K          , KC_L          , KC_SCOLON     , KC_QUOTE      ,
-    KC_LSHIFT     , KC_Z          , KC_X          , KC_C          , KC_V          , KC_B          ,                                                                 KC_N          , KC_M          , KC_COMMA      , KC_DOT        , KC_SLASH      , KC_RSHIFT     ,      
-    KC_LCTRL      , CAPS_WORD     , KC_EQUAL      , KC_LEFT       , KC_RIGHT      ,                      LT(ALT, KC_ESCAPE),             LT(MEDIA, KC_ESCAPE),                      KC_UP         , KC_DOWN       , KC_LBRACKET   , KC_RBRACKET   , MO(ALT)       ,          
-//                ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,
-                                                                                    KC_LGUI       , KC_SPACE      , KC_BSPACE     , KC_LALT       , KC_ESCAPE     , KC_ENTER
+    KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   ,                   KC_5   , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,       
+    KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , KC_Y   ,                   KC_T   , KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
+    KC_LALT, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , KC_H   ,                   KC_G   , KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_QUOT,
+    KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,      
+    KC_LCTL, CAPSWRD, KC_EQL , KC_LEFT, KC_RGHT,          LT(SYMB, KC_ESC), LT(MDIA, KC_ESC)         , KC_UP  , KC_DOWN, KC_LBRC, KC_RBRC, KC_RCTL,
+//         ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
+                                                 KC_LGUI, KC_SPC , KC_BSPC, KC_LALT, KC_ESC , KC_ENT
   ),
 
-  [SYMBOl] = LAYOUT_moonlander(
-    KC_ESCAPE     , KC_F1         , KC_F2         , KC_F3         , KC_F4         , KC_F5         , KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_F6         , KC_F7         , KC_F8         , KC_F9         , KC_F10        , KC_F11        ,
-    KC_TRANSPARENT, KC_EXLM       , KC_AT         , KC_LCBR       , KC_RCBR       , KC_PIPE       , KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_UP         , KC_7          , KC_8          , KC_9          , KC_ASTR       , KC_F12        ,
-    KC_TRANSPARENT, KC_HASH       , KC_DLR        , KC_LPRN       , KC_RPRN       , KC_GRAVE      , KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_DOWN       , KC_4          , KC_5          , KC_6          , KC_KP_PLUS    , KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_CIRC       , KC_LBRACKET   , KC_RBRACKET   , KC_TILDE      ,                                                                 KC_AMPR       , KC_1          , KC_2          , KC_3          , KC_BSLASH     , KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_COMMA      , KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 RGB_MOD       ,                                 RGB_TOG,                        KC_TRANSPARENT, KC_DOT,         KC_0,           KC_EQUAL,       KC_TRANSPARENT, 
-//                ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,
-                                                                                    RGB_VAD       , RGB_VAI       , TOG_LAYER_CLR , KC_TRANSPARENT, RGB_HUD       , RGB_HUI
+  [SYMB] = LAYOUT_moonlander(
+    KC_ESC , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , _______,                   _______, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11 ,
+    _______, KC_EXLM, KC_AT  , KC_LCBR, KC_RCBR, KC_PIPE, _______,                   _______, KC_UP  , KC_7   , KC_8   , KC_9   , KC_ASTR, KC_F12 ,
+    _______, KC_HASH, KC_DLR , KC_LPRN, KC_RPRN, KC_GRV , _______,                   _______, KC_DOWN, KC_4   , KC_5   , KC_6   , KC_PPLS, _______, 
+    _______, _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD,                                     KC_AMPR, KC_1   , KC_2   , KC_3   , KC_BSLS, _______,
+    _______, KC_COMM, _______, _______, _______,              RGB_MOD,           RGB_TOG,              _______, KC_DOT , KC_0   , KC_EQL , _______, 
+//         ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
+                                                 RGB_VAD, RGB_VAI, _______, _______, RGB_HUD, RGB_HUI
   ),
 
-  [MEDIA] = LAYOUT_moonlander(
-    AU_TOG        , KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, RESET         ,          
-    MU_TOG        , KC_TRANSPARENT, KC_TRANSPARENT, KC_MS_UP      , KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_PLAY_PAUSE , KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    MU_MOD        , KC_TRANSPARENT, KC_MS_LEFT    , KC_MS_DOWN    , KC_MS_RIGHT   , KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_PREV_TRACK , KC_NEXT_TRACK , KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_PLAY_PAUSE ,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_MS_BTN1    , KC_MS_BTN2    ,                 KC_TRANSPARENT,                                 KC_TRANSPARENT,                 KC_VOL_UP     , KC_VOL_DOWN   , KC_MUTE       , KC_TRANSPARENT, KC_TRANSPARENT, 
-//                ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,               ,
-                                                                                    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_WWW_BACK
+  [MDIA] = LAYOUT_moonlander(
+    AU_TOG , _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, RESET  ,
+    MU_TOG , KC_BTN1, KC_MS_U, KC_BTN2, _______, _______, _______,                   _______, KC_MPLY, _______, _______, _______, _______, _______, 
+    MU_MOD , KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______,                   _______, KC_MPRV, KC_MNXT, _______, _______, _______, KC_MPLY,
+    _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______, 
+    _______, _______, _______, _______, _______,             _______,            _______,              KC_VOLU, KC_VOLD, KC_MUTE, _______, _______, 
+//         ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
+                                                 _______, _______, _______, _______, _______, _______
  ),
 };
 
@@ -226,10 +225,10 @@ void rgb_matrix_indicators_user(void) {
             rgb_set_mod(MOD_KEYCOLOR);
             rgb_set_layer(LAYER_KEYCOLOR);
             break;
-        case SYMBOL:
+        case SYMB:
             rgb_set_alpha(MOD_KEYCOLOR);
             break;
-        case MEDIA:
+        case MDIA:
             rgb_matrix_set_color_all(0, 0, 0);
             rgb_set_media(MOD_KEYCOLOR);
             rgb_matrix_set_color(62, media_rgb[0], media_rgb[1], media_rgb[2]);
