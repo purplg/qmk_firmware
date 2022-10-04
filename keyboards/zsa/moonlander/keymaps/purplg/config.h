@@ -12,3 +12,5 @@
 #define RGB_MATRIX_STARTUP_SPD 60
 #define RGBLED_NUM 13
 #define RGBLIGHT_LAYERS
+
+#define DEBUG
