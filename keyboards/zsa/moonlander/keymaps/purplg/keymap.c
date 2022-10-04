@@ -1,7 +1,10 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
-#include "print.h"
 #include "raw_hid.h"
+
+#ifdef DEBUG
+#include "print.h"
+#endif
 
 #include "colors.h"
 
@@ -10,19 +13,20 @@
 #define WS_NUM_DISPLAYS 2
 #define WS_NUM_WS 4
 
-uint8_t hid_buffer[32] = { 0 };
+uint8_t hid_buffer[32] = {0};
 
-typedef bool ws_state[WS_NUM_DISPLAYS*WS_NUM_WS];
+typedef bool ws_state[WS_NUM_DISPLAYS * WS_NUM_WS];
 
-uint8_t workspaces[WS_NUM_DISPLAYS*WS_NUM_WS] = {
-  06, 11, 16, 21,
-  07, 12, 17, 22,
+uint8_t workspaces[WS_NUM_DISPLAYS * WS_NUM_WS] = {
+    06, 11, 16, 21, 07, 12, 17, 22,
 };
 
-bool workspace_state[WS_NUM_DISPLAYS*WS_NUM_WS] = {
-  false, false, false, false,
-  false, false, false, false,
+// clang-format off
+bool workspace_state[WS_NUM_DISPLAYS * WS_NUM_WS] = {
+    false, false, false, false,
+    false, false, false, false,
 };
+// clang-format on
 
 uint8_t media_rgb[] = {MOD_KEYCOLOR};
 
@@ -30,18 +34,18 @@ uint8_t media_rgb[] = {MOD_KEYCOLOR};
 uint8_t current_volume = 0;
 
 enum custom_keys {
-  VOL_1 = SAFE_RANGE,
-  VOL_2,
-  VOL_3,
-  VOL_4,
-  VOL_5,
+    VOL_1 = SAFE_RANGE,
+    VOL_2,
+    VOL_3,
+    VOL_4,
+    VOL_5,
 };
 
 enum event {
-    event_NONE  = 0,
-    event_MEDIA = 1,
+    event_NONE      = 0,
+    event_MEDIA     = 1,
     event_WORKSPACE = 2,
-    event_VOLUME = 3,
+    event_VOLUME    = 3,
 };
 
 enum media_state {
@@ -64,6 +68,7 @@ enum layers {
                         32,33,34, 70,69,68,
 */
 
+// clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_moonlander(
     KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   ,                   KC_5   , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,       
@@ -166,71 +171,72 @@ const uint16_t PROGMEM layer_keys[] = {
                           35,         71,
 
 };
+// clang-format on
 
 // Sorted lowest to highest
-const uint16_t PROGMEM volume_keys[] = { 55, 54, 53, 52, 51 };
+const uint16_t PROGMEM volume_keys[] = {55, 54, 53, 52, 51};
 
 const void rgb_set_keys(const uint16_t keys[], uint8_t num_keys, uint8_t red, uint8_t green, uint8_t blue) {
-  for (int i = 0; i < num_keys; i++) {
-    rgb_matrix_set_color(keys[i], red, green, blue);
-  }
+    for (int i = 0; i < num_keys; i++) {
+        rgb_matrix_set_color(keys[i], red, green, blue);
+    }
 }
 
 const void rgb_set_left(uint8_t red, uint8_t green, uint8_t blue) {
-  rgb_set_keys(left_keys, LENGTH(left_keys), red, green, blue);
+    rgb_set_keys(left_keys, LENGTH(left_keys), red, green, blue);
 }
 
 const void rgb_set_right(uint8_t red, uint8_t green, uint8_t blue) {
-  rgb_set_keys(right_keys, LENGTH(right_keys), red, green, blue);
+    rgb_set_keys(right_keys, LENGTH(right_keys), red, green, blue);
 }
 
 const void rgb_set_media(uint8_t red, uint8_t green, uint8_t blue) {
-  rgb_set_keys(media_keys, LENGTH(media_keys), red, green, blue);
-  rgb_matrix_set_color(62, media_rgb[0], media_rgb[1], media_rgb[2]);
+    rgb_set_keys(media_keys, LENGTH(media_keys), red, green, blue);
+    rgb_matrix_set_color(62, media_rgb[0], media_rgb[1], media_rgb[2]);
 }
 
 const void rgb_set_volume(uint8_t red, uint8_t green, uint8_t blue) {
-  for(uint8_t i = 0; i < MAX_VOLUME; i++) {
-    if (i < current_volume) {
-      rgb_matrix_set_color(volume_keys[i], red, green, blue);
-    } else {
-      rgb_matrix_set_color(volume_keys[i], 0x00, 0x00, 0x00);
+    for (uint8_t i = 0; i < MAX_VOLUME; i++) {
+        if (i < current_volume) {
+            rgb_matrix_set_color(volume_keys[i], red, green, blue);
+        } else {
+            rgb_matrix_set_color(volume_keys[i], 0x00, 0x00, 0x00);
+        }
     }
-  }
 }
 
 const void rgb_set_num(uint8_t red, uint8_t green, uint8_t blue) {
-  rgb_set_keys(num_keys, LENGTH(num_keys), red, green, blue);
+    rgb_set_keys(num_keys, LENGTH(num_keys), red, green, blue);
 }
 
 const void rgb_set_alpha(uint8_t red, uint8_t green, uint8_t blue) {
-  rgb_set_keys(alpha_keys, LENGTH(alpha_keys), red, green, blue);
+    rgb_set_keys(alpha_keys, LENGTH(alpha_keys), red, green, blue);
 }
 
 const void rgb_set_wasd(uint8_t red, uint8_t green, uint8_t blue) {
-  rgb_set_keys(wasd_keys, LENGTH(wasd_keys), red, green, blue);
+    rgb_set_keys(wasd_keys, LENGTH(wasd_keys), red, green, blue);
 }
 
 const void rgb_set_ws(uint8_t red, uint8_t green, uint8_t blue) {
-  uint8_t key;
-  bool state;
-  for (uint8_t ws = 0; ws < WS_NUM_WS*WS_NUM_DISPLAYS; ws++) {
-      key = workspaces[ws];
-      state = workspace_state[ws];
-      if (state) {
-	rgb_matrix_set_color(key, red, green, blue);
-      } else {
-	rgb_matrix_set_color(key, ALPHA_KEYCOLOR);
-      }
-  }
+    uint8_t key;
+    bool    state;
+    for (uint8_t ws = 0; ws < WS_NUM_WS * WS_NUM_DISPLAYS; ws++) {
+        key   = workspaces[ws];
+        state = workspace_state[ws];
+        if (state) {
+            rgb_matrix_set_color(key, red, green, blue);
+        } else {
+            rgb_matrix_set_color(key, ALPHA_KEYCOLOR);
+        }
+    }
 }
 
 const void rgb_set_mod(uint8_t red, uint8_t green, uint8_t blue) {
-  rgb_set_keys(mod_keys, LENGTH(mod_keys), red, green, blue);
+    rgb_set_keys(mod_keys, LENGTH(mod_keys), red, green, blue);
 }
 
 const void rgb_set_layer(uint8_t red, uint8_t green, uint8_t blue) {
-  rgb_set_keys(layer_keys, LENGTH(layer_keys), red, green, blue);
+    rgb_set_keys(layer_keys, LENGTH(layer_keys), red, green, blue);
 }
 
 void set_media_state(uint8_t state) {
@@ -249,53 +255,55 @@ void set_media_state(uint8_t state) {
 }
 
 void send_volume(uint8_t volume) {
-  hid_buffer[0] = event_VOLUME; // Volume message
-  hid_buffer[1] = 1;            // 1 means the volume was changed.
-  hid_buffer[2] = volume;       // Volume value
-  hid_buffer[3] = 5;            // Total number of steps
-  raw_hid_send(hid_buffer, 32);
+    hid_buffer[0] = event_VOLUME; // Volume message
+    hid_buffer[1] = 1;            // 1 means the volume was changed.
+    hid_buffer[2] = volume;       // Volume value
+    hid_buffer[3] = 5;            // Total number of steps
+    raw_hid_send(hid_buffer, 32);
 }
 
 void keyboard_post_init_user(void) {
-  debug_enable=true;
-  //debug_matrix=true;
-  //debug_keyboard=true;
-  //debug_mouse=true;
+    debug_enable = true;
+    // debug_matrix=true;
+    // debug_keyboard=true;
+    // debug_mouse=true;
 }
 
 void raw_hid_receive(uint8_t *data, uint8_t length) {
-    #ifdef DEBUG
+#ifdef DEBUG
     uprintf("raw hid of len %d: ", length);
     for (int i = 0; i < length; i++) {
         uprintf("%u,", data[i]);
     }
     uprintf("\n");
-    #endif
+#endif
     switch (data[0]) {
         case event_NONE:
-          break;
+            break;
 
         case event_MEDIA:
-          set_media_state(data[1]);
-          break;
+            set_media_state(data[1]);
+            break;
 
         case event_WORKSPACE:
-	  uint8_t i = 1 << (WS_NUM_WS * WS_NUM_DISPLAYS - 1);
-	  for (uint8_t ws = 0; i >> ws > 0; ws++) {
-	    workspace_state[ws] = data[1] & i >> ws;
-	  }
-          break;
+            uint8_t i = 1 << (WS_NUM_WS * WS_NUM_DISPLAYS - 1);
+            for (uint8_t ws = 0; i >> ws > 0; ws++) {
+                workspace_state[ws] = data[1] & i >> ws;
+            }
+            break;
 
         case event_VOLUME:
-	  if (data[2] > MAX_VOLUME) {
-	    current_volume = MAX_VOLUME;
-	  } else {
-	    current_volume = data[2];
-	  }
-          break;
+            if (data[2] > MAX_VOLUME) {
+                current_volume = MAX_VOLUME;
+            } else {
+                current_volume = data[2];
+            }
+            break;
 
+#ifdef DEBUG
         default:
             uprintf("Unknown event: %u\n", data[0]);
+#endif
     }
 }
 
@@ -319,37 +327,37 @@ void rgb_matrix_indicators_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-  case VOL_1:
-    if (record->event.pressed) {
-      send_volume(1);
-      return false;
+    switch (keycode) {
+        case VOL_1:
+            if (record->event.pressed) {
+                send_volume(1);
+                return false;
+            }
+            break;
+        case VOL_2:
+            if (record->event.pressed) {
+                send_volume(2);
+                return false;
+            }
+            break;
+        case VOL_3:
+            if (record->event.pressed) {
+                send_volume(3);
+                return false;
+            }
+            break;
+        case VOL_4:
+            if (record->event.pressed) {
+                send_volume(4);
+                return false;
+            }
+            break;
+        case VOL_5:
+            if (record->event.pressed) {
+                send_volume(5);
+                return false;
+            }
+            break;
     }
-    break;
-  case VOL_2:
-    if (record->event.pressed) {
-      send_volume(2);
-      return false;
-    }
-    break;
-  case VOL_3:
-    if (record->event.pressed) {
-      send_volume(3);
-      return false;
-    }
-    break;
-  case VOL_4:
-    if (record->event.pressed) {
-      send_volume(4);
-      return false;
-    }
-    break;
-  case VOL_5:
-    if (record->event.pressed) {
-      send_volume(5);
-      return false;
-    }
-    break;
-  }
-  return true;
+    return true;
 }
