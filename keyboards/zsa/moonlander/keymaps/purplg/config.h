@@ -13,4 +13,4 @@
 #define RGBLED_NUM 13
 #define RGBLIGHT_LAYERS
 
-#define DEBUG
+#undef DEBUG
