@@ -262,7 +262,7 @@ void send_volume(uint8_t volume) {
 }
 
 void keyboard_post_init_user(void) {
-    debug_enable = true;
+    // debug_enable = true;
     // debug_matrix=true;
     // debug_keyboard=true;
     // debug_mouse=true;
