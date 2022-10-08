@@ -256,9 +256,8 @@ void set_media_state(uint8_t state) {
 
 void send_volume(uint8_t volume) {
     hid_buffer[0] = event_VOLUME; // Volume message
-    hid_buffer[1] = 1;            // 1 means the volume was changed.
-    hid_buffer[2] = volume;       // Volume value
-    hid_buffer[3] = 5;            // Total number of steps
+    hid_buffer[1] = volume;       // Volume value
+    hid_buffer[2] = 5;            // Total number of steps
     raw_hid_send(hid_buffer, 32);
 }
 
@@ -293,10 +292,10 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
             break;
 
         case event_VOLUME:
-            if (data[2] > MAX_VOLUME) {
+            if (data[1] > MAX_VOLUME) {
                 current_volume = MAX_VOLUME;
             } else {
-                current_volume = data[2];
+                current_volume = data[1];
             }
             break;
 
