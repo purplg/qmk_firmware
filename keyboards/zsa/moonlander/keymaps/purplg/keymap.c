@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,      
     KC_LCTL, CAPSWRD, KC_EQL , KC_LEFT, KC_RGHT,          LT(SYMB, KC_ESC), LT(MDIA, KC_ESC)         , KC_UP  , KC_DOWN, KC_LBRC, KC_RBRC, KC_RCTL,
 //         ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
-                                                 KC_LGUI, KC_SPC , KC_BSPC, KC_LALT, KC_ESC , KC_ENT
+                                                 KC_SPC , KC_LGUI, KC_BSPC, KC_LALT, KC_ESC , KC_ENT
   ),
 
   [SYMB] = LAYOUT_moonlander(
@@ -160,7 +160,7 @@ const uint16_t PROGMEM mod_keys[] = {
    2,
    3,
    4,
-                        32,       70,
+                           33,    70,
 };
 
 const uint16_t PROGMEM layer_keys[] = {
