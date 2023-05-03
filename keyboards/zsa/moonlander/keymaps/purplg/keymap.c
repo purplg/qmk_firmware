@@ -71,11 +71,11 @@ enum layers {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_moonlander(
-    KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   ,                   KC_5   , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,       
+    KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   ,                   KC_5   , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
     KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , KC_Y   ,                   KC_T   , KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
     KC_LALT, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , KC_H   ,                   KC_G   , KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_QUOT,
-    KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,      
-    KC_LCTL, CAPSWRD, KC_EQL , KC_LEFT, KC_RGHT,          LT(SYMB, KC_ESC), LT(MDIA, KC_ESC)         , KC_UP  , KC_DOWN, KC_LBRC, KC_RBRC, KC_RCTL,
+    KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
+    KC_LCTL, CW_TOGG, KC_EQL , KC_LEFT, KC_RGHT,          LT(SYMB, KC_ESC), LT(MDIA, KC_ESC)         , KC_UP  , KC_DOWN, KC_LBRC, KC_RBRC, KC_RCTL,
 //         ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
                                                  KC_SPC , KC_LGUI, KC_BSPC, KC_LALT, KC_ESC , KC_ENT
   ),
@@ -91,11 +91,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [MDIA] = LAYOUT_moonlander(
-    AU_TOG , _______, _______, _______, _______, _______, _______,                   _______, _______, _______, VOL_5  , _______, _______, RESET  ,
-    MU_TOG , KC_BTN1, KC_MS_U, KC_BTN2, _______, _______, _______,                   KC_MPRV, KC_MPLY, KC_MNXT, VOL_4  , _______, _______, _______, 
-    MU_MOD , KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______,                   _______, _______, _______, VOL_3  , _______, _______, KC_MPLY,
-    _______, _______, _______, _______, _______, _______,                                     _______, _______, VOL_2  , _______, _______, _______, 
-    _______, _______, _______, _______, _______,             _______,            _______,              _______, VOL_1  , _______, _______, _______, 
+    _______, _______, _______, _______, _______, _______, _______,                   _______, _______, _______, VOL_5  , _______, _______, RESET  ,
+    _______, KC_BTN1, KC_MS_U, KC_BTN2, _______, _______, _______,                   KC_MPRV, KC_MPLY, KC_MNXT, VOL_4  , _______, _______, _______,
+    _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______,                   _______, _______, _______, VOL_3  , _______, _______, KC_MPLY,
+    _______, _______, _______, _______, _______, _______,                                     _______, _______, VOL_2  , _______, _______, _______,
+    _______, _______, _______, _______, _______,             _______,            _______,              _______, VOL_1  , _______, _______, _______,
 //         ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
                                                  _______, _______, _______, _______, _______, _______
  ),
@@ -306,7 +306,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
     }
 }
 
-void rgb_matrix_indicators_user(void) {
+bool rgb_matrix_indicators_user(void) {
     rgb_matrix_set_color_all(0, 0, 0);
     switch (get_highest_layer(layer_state)) {
         case BASE:
@@ -314,15 +314,16 @@ void rgb_matrix_indicators_user(void) {
             rgb_set_ws(WASD_KEYCOLOR);
             rgb_set_mod(MOD_KEYCOLOR);
             rgb_set_layer(LAYER_KEYCOLOR);
-            break;
+          return true;
         case SYMB:
             rgb_set_alpha(MOD_KEYCOLOR);
-            break;
+          return true;
         case MDIA:
             rgb_set_media(MOD_KEYCOLOR);
             rgb_set_volume(MOD_KEYCOLOR);
-            break;
+          return true;
     }
+    return false;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
