@@ -58,6 +58,7 @@ enum layers {
     L_WRKMN,
     L_COLMK,
     L_SYMB,
+    L_NUMB,
     L_MDIA,
 };
 
@@ -74,7 +75,7 @@ enum layers {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [L_QWRTY] = LAYOUT_moonlander(
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   ,                   KC_EQL , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
-  KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , _______,                   _______, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
+  KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , MO(L_NUMB),                _______, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
   KC_LALT, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , MO(L_SYMB),             MO(L_MDIA), KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_QUOT,
   KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
   KC_LCTL, _______, _______, KC_DOWN, KC_UP  ,          KC_ESC,                     KC_ESC         , KC_LEFT, KC_RGHT, KC_LBRC, KC_RBRC, _______,
@@ -84,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [L_WRKMN] = LAYOUT_moonlander(
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   ,                   KC_EQL , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
-  KC_TAB , KC_Q   , KC_D   , KC_R   , KC_W   , KC_B   , _______,                   KC_MINS, KC_J   , KC_F   , KC_U   , KC_P   , KC_SCLN, KC_BSLS,
+  KC_TAB , KC_Q   , KC_D   , KC_R   , KC_W   , KC_B   , MO(L_NUMB),                KC_MINS, KC_J   , KC_F   , KC_U   , KC_P   , KC_SCLN, KC_BSLS,
   KC_LALT, KC_A   , KC_S   , KC_H   , KC_T   , KC_G   , MO(L_SYMB),             MO(L_MDIA), KC_Y   , KC_N   , KC_E   , KC_O   , KC_I   , KC_QUOT,
   KC_LSFT, KC_Z   , KC_X   , KC_M   , KC_C   , KC_V   ,                                     KC_K   , KC_L   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
   KC_LCTL, _______, _______, KC_DOWN, KC_UP  ,          KC_ESC,                     KC_ESC         , KC_LEFT, KC_RGHT, KC_LBRC, KC_RBRC, _______,
@@ -108,6 +109,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______,                   _______, _______, KC_BTN1, VOL_3  , KC_BTN2, _______, KC_MPLY,
   _______, _______, _______, _______, _______, _______,                                     _______, _______, VOL_2  , _______, _______, _______,
   _______, _______, _______, _______, _______,             _______,            _______,              _______, VOL_1  , _______, _______, _______,
+//       ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
+                                       DF(L_QWRTY), DF(L_WRKMN), _______, _______, _______, _______
+),
+
+[L_NUMB] = LAYOUT_moonlander(
+  _______, _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, _______,
+  _______, _______, _______, _______, _______, _______, _______,                   _______, KC_7   , KC_8   , KC_9   , _______, _______, _______,
+  _______, _______, _______, _______, _______, _______, _______,                   _______, KC_4   , KC_5   , KC_6   , _______, _______, _______,
+  _______, _______, _______, _______, _______, _______,                                     KC_1   , KC_2   , KC_3   , _______, _______, _______,
+  _______, _______, _______, _______, _______,             _______,            _______,              KC_0   , KC_DOT , _______, _______, _______,
 //       ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
                                        DF(L_QWRTY), DF(L_WRKMN), _______, _______, _______, _______
 ),
@@ -147,6 +158,15 @@ const uint16_t PROGMEM num_keys[] = {
 
 
 
+};
+
+const uint16_t PROGMEM numpad_keys[] = {
+
+                                          62, 57, 52,
+                                          63, 58, 53,
+                                          64, 59, 54,
+                                              60,
+                                           
 };
 
 const uint16_t PROGMEM alpha_keys[] = {
@@ -194,14 +214,6 @@ const void rgb_set_keys(const uint16_t keys[], uint8_t num_keys, uint8_t red, ui
     }
 }
 
-const void rgb_set_left(uint8_t red, uint8_t green, uint8_t blue) {
-    rgb_set_keys(left_keys, LENGTH(left_keys), red, green, blue);
-}
-
-const void rgb_set_right(uint8_t red, uint8_t green, uint8_t blue) {
-    rgb_set_keys(right_keys, LENGTH(right_keys), red, green, blue);
-}
-
 const void rgb_set_media(uint8_t red, uint8_t green, uint8_t blue) {
     rgb_set_keys(media_keys, LENGTH(media_keys), red, green, blue);
     rgb_matrix_set_color(62, media_rgb[0], media_rgb[1], media_rgb[2]);
@@ -217,18 +229,6 @@ const void rgb_set_volume(uint8_t red, uint8_t green, uint8_t blue) {
     }
 }
 
-const void rgb_set_num(uint8_t red, uint8_t green, uint8_t blue) {
-    rgb_set_keys(num_keys, LENGTH(num_keys), red, green, blue);
-}
-
-const void rgb_set_alpha(uint8_t red, uint8_t green, uint8_t blue) {
-    rgb_set_keys(alpha_keys, LENGTH(alpha_keys), red, green, blue);
-}
-
-const void rgb_set_wasd(uint8_t red, uint8_t green, uint8_t blue) {
-    rgb_set_keys(wasd_keys, LENGTH(wasd_keys), red, green, blue);
-}
-
 const void rgb_set_ws(uint8_t red, uint8_t green, uint8_t blue) {
     uint8_t key;
     bool    state;
@@ -241,14 +241,6 @@ const void rgb_set_ws(uint8_t red, uint8_t green, uint8_t blue) {
             rgb_matrix_set_color(key, ALPHA_KEYCOLOR);
         }
     }
-}
-
-const void rgb_set_mod(uint8_t red, uint8_t green, uint8_t blue) {
-    rgb_set_keys(mod_keys, LENGTH(mod_keys), red, green, blue);
-}
-
-const void rgb_set_layer(uint8_t red, uint8_t green, uint8_t blue) {
-    rgb_set_keys(layer_keys, LENGTH(layer_keys), red, green, blue);
 }
 
 void set_media_state(uint8_t state) {
@@ -322,14 +314,18 @@ bool rgb_matrix_indicators_user(void) {
     rgb_matrix_set_color_all(0, 0, 0);
     switch (get_highest_layer(layer_state)) {
         case L_QWRTY:
-            rgb_set_alpha(ALPHA_KEYCOLOR);
+            rgb_set_keys(alpha_keys, LENGTH(alpha_keys), ALPHA_KEYCOLOR);
             rgb_set_ws(WASD_KEYCOLOR);
-            rgb_set_mod(MOD_KEYCOLOR);
-            rgb_set_layer(LAYER_KEYCOLOR);
+            rgb_set_keys(mod_keys, LENGTH(mod_keys), MOD_KEYCOLOR);
+            rgb_set_keys(layer_keys, LENGTH(layer_keys), LAYER_KEYCOLOR);
           return true;
         case L_SYMB:
-            rgb_set_alpha(MOD_KEYCOLOR);
+            rgb_set_keys(alpha_keys, LENGTH(alpha_keys), MOD_KEYCOLOR);
           return true;
+        case L_NUMB:
+            rgb_set_keys(numpad_keys, LENGTH(numpad_keys), ALPHA_KEYCOLOR);
+            rgb_matrix_set_color(55, MOD_KEYCOLOR);
+            return true;
         case L_MDIA:
             rgb_set_media(MOD_KEYCOLOR);
             rgb_set_volume(MOD_KEYCOLOR);
