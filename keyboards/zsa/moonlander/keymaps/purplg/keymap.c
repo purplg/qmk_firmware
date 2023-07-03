@@ -54,9 +54,11 @@ enum media_state {
 };
 
 enum layers {
-    BASE = 0,
-    SYMB,
-    MDIA,
+    L_QWRTY = 0,
+    L_WRKMN,
+    L_COLMK,
+    L_SYMB,
+    L_MDIA,
 };
 
 /*
@@ -70,34 +72,44 @@ enum layers {
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-[BASE] = LAYOUT_moonlander(
-  KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   ,                   KC_5   , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
-  KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , KC_Y   ,                   KC_T   , KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
-  KC_LALT, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , KC_H   ,                   KC_G   , KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_QUOT,
+[L_QWRTY] = LAYOUT_moonlander(
+  KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   ,                   KC_EQL , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
+  KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , _______,                   _______, KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
+  KC_LALT, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , MO(L_SYMB),             MO(L_MDIA), KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_QUOT,
   KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
-  KC_LCTL, CW_TOGG, KC_EQL , KC_DOWN, KC_UP  ,          LT(SYMB, KC_ESC), LT(MDIA, KC_ESC)         , KC_LEFT, KC_RGHT, KC_LBRC, KC_RBRC, KC_RCTL,
+  KC_LCTL, _______, _______, KC_DOWN, KC_UP  ,          KC_ESC,                     KC_ESC         , KC_LEFT, KC_RGHT, KC_LBRC, KC_RBRC, _______,
 //       ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
-                                               KC_SPC , KC_LGUI, KC_BSPC, KC_LALT, KC_ESC , KC_ENT
+                                               KC_SPC , KC_LGUI, KC_BSPC, KC_LALT, KC_RSFT, KC_ENT
 ),
 
-[SYMB] = LAYOUT_moonlander(
+[L_WRKMN] = LAYOUT_moonlander(
+  KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   ,                   KC_EQL , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
+  KC_TAB , KC_Q   , KC_D   , KC_R   , KC_W   , KC_B   , _______,                   KC_MINS, KC_J   , KC_F   , KC_U   , KC_P   , KC_SCLN, KC_BSLS,
+  KC_LALT, KC_A   , KC_S   , KC_H   , KC_T   , KC_G   , MO(L_SYMB),             MO(L_MDIA), KC_Y   , KC_N   , KC_E   , KC_O   , KC_I   , KC_QUOT,
+  KC_LSFT, KC_Z   , KC_X   , KC_M   , KC_C   , KC_V   ,                                     KC_K   , KC_L   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
+  KC_LCTL, _______, _______, KC_DOWN, KC_UP  ,          KC_ESC,                     KC_ESC         , KC_LEFT, KC_RGHT, KC_LBRC, KC_RBRC, _______,
+//       ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
+                                               KC_SPC , KC_LGUI , KC_BSPC, KC_LALT, KC_RSFT, KC_ENT
+),
+
+[L_SYMB] = LAYOUT_moonlander(
   KC_ESC , KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , KC_F6  ,                   KC_F5  , KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F11 ,
-  _______, KC_EXLM, KC_AT  , KC_LCBR, KC_RCBR, KC_PIPE, _______,                   _______, _______, _______, _______, _______, _______, KC_F12 ,
-  _______, KC_HASH, KC_DLR , KC_LPRN, KC_RPRN, KC_GRV , _______,                   _______, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, KC_PPLS, KC_PGUP,
-  KC_HOME, _______, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD,                                     KC_AMPR, KC_1   , KC_2   , KC_3   , KC_BSLS, KC_PGDN,
-  KC_END , KC_COMM, _______, _______, _______,              RGB_MOD,           RGB_TOG,              _______, KC_DOT , KC_0   , KC_ASTR, _______,
+  _______, _______, _______, _______, _______, _______, _______,                   _______, KC_LPRN, KC_RPRN, KC_LBRC, KC_RBRC, _______, KC_F12 ,
+  _______, _______, _______, _______, _______, _______, _______,                   _______, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, _______, KC_PGUP,
+  _______, _______, _______, _______, _______, _______,                                     KC_MINS, KC_PLUS, KC_LCBR, KC_RCBR, _______, KC_PGDN,
+  _______, _______, _______, _______, _______,              RGB_MOD,           RGB_TOG,              KC_EQL , _______, _______, _______, _______,
 //       ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
-                                               RGB_VAD, RGB_VAI, _______, _______, RGB_HUD, KC_DEL
+                                               RGB_VAD, RGB_VAI, KC_DEL, _______, RGB_HUD, KC_DEL
 ),
 
-[MDIA] = LAYOUT_moonlander(
-  _______, _______, _______, _______, _______, _______, _______,                   _______, _______, _______, VOL_5  , _______, _______, RESET  ,
-  _______, KC_BTN1, KC_MS_U, KC_BTN2, _______, _______, _______,                   KC_MPRV, KC_MPLY, KC_MNXT, VOL_4  , _______, _______, _______,
-  _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______,                   _______, _______, _______, VOL_3  , _______, _______, KC_MPLY,
+[L_MDIA] = LAYOUT_moonlander(
+  _______, _______, _______, _______, _______, _______, _______,                   _______, _______, _______, VOL_5  , _______, _______, QK_BOOT,
+  _______, _______, KC_MS_U, _______, _______, _______, _______,                   KC_MPRV, KC_MPLY, KC_MNXT, VOL_4  , _______, _______, _______,
+  _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______,                   _______, _______, KC_BTN1, VOL_3  , KC_BTN2, _______, KC_MPLY,
   _______, _______, _______, _______, _______, _______,                                     _______, _______, VOL_2  , _______, _______, _______,
   _______, _______, _______, _______, _______,             _______,            _______,              _______, VOL_1  , _______, _______, _______,
 //       ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
-                                               _______, _______, _______, _______, _______, _______
+                                       DF(L_QWRTY), DF(L_WRKMN), _______, _______, _______, _______
 ),
 };
 
@@ -160,15 +172,15 @@ const uint16_t PROGMEM mod_keys[] = {
    2,
    3,
    4,
-                           33,    70,
+                                  70,
 };
 
 const uint16_t PROGMEM layer_keys[] = {
 
 
+                          31,         67,                        
 
 
-                          35,         71,
 
 };
 // clang-format on
@@ -309,16 +321,16 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
 bool rgb_matrix_indicators_user(void) {
     rgb_matrix_set_color_all(0, 0, 0);
     switch (get_highest_layer(layer_state)) {
-        case BASE:
+        case L_QWRTY:
             rgb_set_alpha(ALPHA_KEYCOLOR);
             rgb_set_ws(WASD_KEYCOLOR);
             rgb_set_mod(MOD_KEYCOLOR);
             rgb_set_layer(LAYER_KEYCOLOR);
           return true;
-        case SYMB:
+        case L_SYMB:
             rgb_set_alpha(MOD_KEYCOLOR);
           return true;
-        case MDIA:
+        case L_MDIA:
             rgb_set_media(MOD_KEYCOLOR);
             rgb_set_volume(MOD_KEYCOLOR);
           return true;
