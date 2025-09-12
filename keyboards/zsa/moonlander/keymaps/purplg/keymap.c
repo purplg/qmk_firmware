@@ -81,12 +81,12 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [L_QWRTY] = LAYOUT(
     KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_6   ,                   KC_EQL , KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
-    KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , KC_Y,                   MO(L_NUMB), KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
+    KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , KC_Y   ,                MO(L_NUMB), KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSLS,
     KC_LALT, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , MO(L_SYMB),             MO(L_MDIA), KC_H   , KC_J   , KC_K   , KC_L   , KC_SCLN, KC_QUOT,
-    KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,                                     KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
-    KC_LCTL, _______, _______, KC_DOWN, KC_UP  ,          KC_ESC,                     KC_ESC         , KC_LEFT, KC_RGHT, KC_LBRC, KC_RBRC, _______,
-//         ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
-                                                 KC_SPC, KC_LGUI , KC_BSPC,          KC_LALT, KC_ESC , KC_ENT
+    KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   ,/*******/                  /********/KC_N   , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
+    KC_LCTL, _______, _______, KC_DOWN, KC_UP  , /******/ KC_ESC ,                   KC_ESC /*******/, KC_LEFT, KC_RGHT, KC_LBRC, KC_RBRC, KC_LCTL,
+//         ,        ,        ,       /,********,/       ,        ,        ,        ,        ,      /*,********,/       ,        ,        ,        ,
+                                       KC_SPC , KC_LGUI , KC_BSPC,                   KC_LALT, KC_ESC , KC_ENT
   ),
 
 [L_WRKMN] = LAYOUT(
@@ -94,7 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB , KC_Q   , KC_D   , KC_R   , KC_W   , KC_B   , MO(L_NUMB),                KC_MINS, KC_J   , KC_F   , KC_U   , KC_P   , KC_SCLN, KC_BSLS,
   KC_LALT, KC_A   , KC_S   , KC_H   , KC_T   , KC_G   , MO(L_SYMB),             MO(L_MDIA), KC_Y   , KC_N   , KC_E   , KC_O   , KC_I   , KC_QUOT,
   KC_LSFT, KC_Z   , KC_X   , KC_M   , KC_C   , KC_V   ,                                     KC_K   , KC_L   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
-  KC_LCTL, _______, _______, KC_DOWN, KC_UP  ,          KC_ESC,                     KC_ESC         , KC_LEFT, KC_RGHT, KC_LBRC, KC_RBRC, _______,
+  KC_LCTL, _______, _______, KC_DOWN, KC_UP  ,          KC_ESC ,                     KC_ESC        , KC_LEFT, KC_RGHT, KC_LBRC, KC_RBRC, _______,
 //       ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
                                               KC_SPC , KC_LGUI , KC_BSPC, KC_LALT, KC_RSFT, KC_ENT
 ),
@@ -110,9 +110,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [L_MDIA] = LAYOUT(
-  _______, _______, _______, _______, _______, _______, _______,                   _______, _______, _______, VOL_5  , _______, _______, QK_BOOT,
-  _______, _______, KC_MS_U, _______, _______, _______, _______,                   KC_MPRV, KC_MPLY, KC_MNXT, VOL_4  , _______, _______, _______,
-  _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______,                   _______, _______, KC_BTN1, VOL_3  , KC_BTN2, _______, KC_MPLY,
+  _______, _______, _______, _______, _______, _______, _______,                   KC_PSCR, _______, _______, VOL_5  , _______, _______, QK_BOOT,
+  _______, KC_BTN1, KC_MS_U, KC_BTN2, _______, _______, _______,                   KC_MPRV, KC_MPLY, KC_MNXT, VOL_4  , _______, _______, _______,
+  _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, _______,                   _______, _______, _______, VOL_3  , _______, _______, _______,
   _______, _______, _______, _______, _______, _______,                                     _______, _______, VOL_2  , _______, _______, _______,
   _______, _______, _______, _______, _______,             _______,            _______,              _______, VOL_1  , _______, _______, _______,
 //       ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,        ,
